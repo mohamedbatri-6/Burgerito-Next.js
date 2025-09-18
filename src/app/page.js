@@ -56,7 +56,7 @@ export default async function Home() {
                   </h3>
                 </Link>
                 <p className="text-gray-400 mb-3">Prix : {burger.price} €</p>
-                {burger.isAvailable ? (
+                {true ? (
                   <button className="bg-orange-500 text-white py-2 rounded-lg w-full mt-auto hover:bg-orange-600 transition">
                     Ajouter au panier
                   </button>
