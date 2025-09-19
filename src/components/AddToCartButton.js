@@ -1,12 +1,13 @@
 "use client";
 import { useState } from "react";
+import { useCart } from "../context/CartContext";
 
 export default function AddToCartButton({ product }) {
   const [adding, setAdding] = useState(false);
-  const isAvailable = product?.isAvailable ?? true;
+  const { updateCartCount } = useCart();
 
   function addToCart() {
-    if (!isAvailable) return;
+    if (!product?.isAvailable) return;
     setAdding(true);
 
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -17,21 +18,22 @@ export default function AddToCartButton({ product }) {
       imageUrl: product.imageUrl || "/placeholder.png",
     });
     localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
 
-    setTimeout(() => setAdding(false), 400);
+    setTimeout(() => setAdding(false), 300);
   }
 
   return (
     <button
       onClick={addToCart}
-      disabled={!isAvailable || adding}
+      disabled={adding || !product?.isAvailable}
       className={`w-full mt-auto rounded-lg py-2 transition ${
-        isAvailable
+        product?.isAvailable
           ? "bg-orange-500 hover:bg-orange-600 text-white"
           : "bg-gray-600 text-white cursor-not-allowed"
       }`}
     >
-      {!isAvailable ? "Indisponible" : adding ? "Ajout..." : "Ajouter au panier"}
+      {product?.isAvailable ? (adding ? "Ajout..." : "Ajouter au panier") : "Indisponible"}
     </button>
   );
 }

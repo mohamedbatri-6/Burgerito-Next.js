@@ -1,5 +1,7 @@
 import "./globals.css";
 import Link from "next/link";
+import { CartProvider } from "../context/CartContext";
+import CartBadge from "../components/CartBadge"; // ✅ import du client component
 
 export const metadata = {
   title: "Burgerito",
@@ -10,27 +12,39 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fr">
       <body className="bg-black text-white">
-        <header className="bg-black py-4">
-          <div className="max-w-6xl mx-auto flex justify-between items-center px-6">
-            <Link href="/" className="text-white text-2xl font-bold">
-              <img src="/logo.png" alt="Logo" className="h-8" />
-            </Link>
+        <CartProvider>
+          <header className="bg-black py-4">
+            <div className="max-w-6xl mx-auto flex justify-between items-center px-6">
+              <Link href="/" className="text-white text-2xl font-bold">
+                <img src="/logo.svg" alt="Logo" className="h-8" />
+              </Link>
 
-            <div className="flex gap-3">
-              <Link href="/cart" className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">
-                Panier
-              </Link>
-              <Link href="/register" className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">
-                Inscription
-              </Link>
-              <Link href="/login" className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg">
-                Connexion
-              </Link>
+              <div className="flex gap-3 items-center">
+                <Link
+                  href="/cart"
+                  className="relative bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg"
+                >
+                  Panier
+                  <CartBadge /> {/* ✅ Badge en client component */}
+                </Link>
+                <Link
+                  href="/register"
+                  className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg"
+                >
+                  Inscription
+                </Link>
+                <Link
+                  href="/login"
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg"
+                >
+                  Connexion
+                </Link>
+              </div>
             </div>
-          </div>
-        </header>
+          </header>
 
-        <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen">{children}</main>
+        </CartProvider>
       </body>
     </html>
   );
