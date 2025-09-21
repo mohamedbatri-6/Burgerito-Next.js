@@ -1,79 +1,71 @@
 "use client";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function RegisterPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
   const router = useRouter();
+  const [error, setError] = useState("");
 
-  async function handleSubmit(e) {
+  async function handleRegister(e) {
     e.preventDefault();
-    try {
-      const res = await fetch("https://node-eemi.vercel.app/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
+    setError("");
 
-      if (!res.ok) {
-        setMessage("❌ Erreur lors de l’inscription");
-        return;
-      }
+    const firstname = e.target.firstname.value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
 
-      const data = await res.json();
-      localStorage.setItem("token", data.token);
+    // On récupère les utilisateurs déjà enregistrés
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
 
-      setMessage("✅ Inscription réussie !");
-      router.push("/"); // Redirection accueil après inscription
-    } catch (err) {
-      console.error(err);
-      setMessage("❌ Erreur serveur");
+    // Vérifie si l'email existe déjà
+    if (users.find((u) => u.email === email)) {
+      setError("Cet e-mail est déjà utilisé");
+      return;
     }
+
+    // Ajoute un nouvel utilisateur
+    users.push({ firstname, email, password });
+    localStorage.setItem("users", JSON.stringify(users));
+
+    // Redirige vers la page de connexion
+    router.push("/login");
   }
 
   return (
     <main className="flex items-center justify-center min-h-screen bg-black text-white">
-      <div className="w-full max-w-md text-center">
-        <h1 className="text-5xl font-extrabold mb-10">Je m’inscris</h1>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            placeholder="Nom"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full p-4 rounded-xl bg-gray-800 text-white placeholder-gray-400 text-center"
-            required
-          />
-          <input
-            type="email"
-            placeholder="E-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-4 rounded-xl bg-gray-800 text-white placeholder-gray-400 text-center"
-            required
-          />
-          <input
-            type="password"
-            placeholder="Mot de passe"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-4 rounded-xl bg-gray-800 text-white placeholder-gray-400 text-center"
-            required
-          />
-          <button
-            type="submit"
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold text-lg"
-          >
-            Inscription
-          </button>
-        </form>
-
-        {message && <p className="mt-4 text-sm">{message}</p>}
-      </div>
+      <form
+        onSubmit={handleRegister}
+        className="w-full max-w-md text-center space-y-4"
+      >
+        <h1 className="text-5xl font-extrabold mb-6">Inscription</h1>
+        <input
+          name="firstname"
+          placeholder="Prénom"
+          className="w-full p-4 rounded-xl bg-gray-800 text-white text-center"
+          required
+        />
+        <input
+          name="email"
+          type="email"
+          placeholder="E-mail"
+          className="w-full p-4 rounded-xl bg-gray-800 text-white text-center"
+          required
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="Mot de passe"
+          className="w-full p-4 rounded-xl bg-gray-800 text-white text-center"
+          required
+        />
+        {error && <p className="text-red-400">{error}</p>}
+        <button
+          type="submit"
+          className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold"
+        >
+          S’inscrire
+        </button>
+      </form>
     </main>
   );
 }

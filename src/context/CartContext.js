@@ -1,25 +1,32 @@
+// src/context/CartContext.js
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
-  const [cartCount, setCartCount] = useState(0);
+  const [cart, setCart] = useState([]);
 
-  // Charger le panier depuis localStorage
   useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    setCartCount(cart.length);
+    const stored = JSON.parse(localStorage.getItem("cart") || "[]");
+    setCart(stored);
   }, []);
 
-  // Fonction pour mettre à jour le compteur
-  const updateCartCount = () => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    setCartCount(cart.length);
-  };
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
+  function addToCart(item) {
+    setCart((prev) => [...prev, item]);
+  }
+  function clearCart() {
+    setCart([]);
+  }
+
+  const cartCount = cart.length;
 
   return (
-    <CartContext.Provider value={{ cartCount, updateCartCount }}>
+    <CartContext.Provider value={{ cart, cartCount, addToCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );
