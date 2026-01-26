@@ -1,0 +1,64 @@
+---
+- name: Deploy Burgerito Next.js Application
+  hosts: webservers
+  become: yes
+
+  vars:
+    app_directory: "/var/www/burgerito"
+    repo_url: "https://github.com/mohamedbatri-6/Burgerito-Next.js.git"
+    node_version: "20"
+
+  tasks:
+    - name: Installer dépendances système
+      apt:
+        name:
+          - git
+          - curl
+          - ca-certificates
+        state: present
+        update_cache: yes
+
+    - name: Installer Node.js {{ node_version }} (NodeSource)
+      shell: |
+        curl -fsSL https://deb.nodesource.com/setup_{{ node_version }}.x | bash -
+        apt-get install -y nodejs
+      args:
+        executable: /bin/bash
+
+    - name: S'assurer que le répertoire de l'application existe
+      file:
+        path: "{{ app_directory }}"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: "0755"
+
+    - name: Récupérer le code source depuis Git
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ app_directory }}"
+        version: main
+        force: yes
+        update: yes
+        accept_hostkey: yes
+
+    - name: Installer PM2 globalement si absent
+      npm:
+        name: pm2
+        global: yes
+        state: present
+
+    - name: Installer les dépendances NPM
+      command: npm ci
+      args:
+        chdir: "{{ app_directory }}"
+
+    - name: Construire l'application Next.js
+      command: npm run build
+      args:
+        chdir: "{{ app_directory }}"
+
+    - name: Démarrer ou redémarrer l'application avec PM2
+      command: pm2 restart burgerito --update-env || pm2 start npm --name "burgerito" -- run start
+      args:
+        chdir: "{{ app_directory }}"

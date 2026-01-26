@@ -9,15 +9,21 @@ export default function ProfilePage() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    const current = JSON.parse(localStorage.getItem("currentUser"));
+    // Récup user
+    const storedUser = localStorage.getItem("currentUser");
+    const current = storedUser ? JSON.parse(storedUser) : null;
+
     if (!current) {
       router.push("/login");
+      return;
     } else {
       setUser(current);
     }
 
-    const savedOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-    setOrders(savedOrders);
+    // Récup commandes
+    const savedOrdersRaw = localStorage.getItem("orders");
+    const savedOrders = savedOrdersRaw ? JSON.parse(savedOrdersRaw) : [];
+    setOrders(Array.isArray(savedOrders) ? savedOrders : []);
   }, [router]);
 
   function logout() {
@@ -25,6 +31,7 @@ export default function ProfilePage() {
     router.push("/");
   }
 
+  // tant que user pas chargé -> on attend
   if (!user) return null;
 
   return (
@@ -47,25 +54,31 @@ export default function ProfilePage() {
         </button>
       </div>
 
-      {orders.length === 0 ? (
+      {(!orders || orders.length === 0) ? (
         <p>Aucune commande passée.</p>
       ) : (
-        orders.map((order, index) => (
+        (orders || []).map((order, index) => (
           <div key={index} className="mb-10">
-            <h2 className="text-lg mb-4">{order.date}</h2>
+            <h2 className="text-lg mb-4">{order.date || "Commande"}</h2>
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {order.items.map((item, i) => (
+              {(order.items || []).map((item, i) => (
                 <div
                   key={i}
                   className="bg-[#1c1c1c] rounded-lg p-4 flex flex-col items-center"
                 >
                   <img
-                    src={item.imageUrl}
-                    alt={item.name}
+                    src={item?.imageUrl || "/placeholder.png"}
+                    alt={item?.name || "Produit"}
                     className="w-full h-32 object-cover rounded-md mb-3"
                   />
-                  <h3 className="font-semibold">{item.name}</h3>
-                  <p className="text-gray-400">€{item.price.toFixed(2)}</p>
+                  <h3 className="font-semibold">
+                    {item?.name || "Produit sans nom"}
+                  </h3>
+
+                  <p className="text-gray-400">
+                    €{Number(item?.price || 0).toFixed(2)}
+                  </p>
                 </div>
               ))}
             </div>
