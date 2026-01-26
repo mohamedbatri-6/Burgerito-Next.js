@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🍔 Burgerito
 
-## Getting Started
+Burgerito est une application e-commerce moderne pour la commande de burgers artisanaux, développée avec **Next.js**, **React**, et **Tailwind CSS**.  
+Elle offre une expérience fluide, interactive et responsive, avec un système complet de panier, de profil utilisateur et de support client en temps réel.
 
-First, run the development server:
+---
 
+## 🚀 Fonctionnalités principales
+
+- 🔐 **Authentification sécurisée** (inscription, connexion, déconnexion)
+- ![7](https://github.com/user-attachments/assets/7e5cfb38-80bf-4ad8-8591-23fb31056f60)
+- ![8](https://github.com/user-attachments/assets/0bd17a29-a6e8-4265-bba6-26c938196872)
+
+
+- 🍔 **Catalogue dynamique** des burgers (nom, image, prix, disponibilité)
+- ![2](https://github.com/user-attachments/assets/e4fc35e7-0dc3-49a1-8b1f-c4185a28af2c)
+ ![3](https://github.com/user-attachments/assets/9535deea-50b4-4319-be9c-a2f65b04e82c)
+
+- 🛒 **Gestion du panier** (ajout, suppression, mise à jour)
+- ![5](https://github.com/user-attachments/assets/cc6d52fd-e51f-42c4-8135-fc6af720b3d3)
+![6](https://github.com/user-attachments/assets/e2777829-fff9-43ef-a6d6-fd1bb1eb754d)
+
+- 👤 **Espace utilisateur** (profil, historique de commandes)
+- ![5](https://github.com/user-attachments/assets/220bc244-fb2b-446e-81e2-b8c084d01c86)
+
+- 💬 **Support client en temps réel** (via WebSocket)
+- ![supp](https://github.com/user-attachments/assets/fb8c0c72-9cf5-486a-8c0b-f83845ac6872)
+- 📱 **Design responsive** (mobile et desktop)
+- 🌙 **Interface moderne** inspirée des interfaces e-commerce réelles
+
+---
+
+## 🧠 Stack technique
+
+| Technologie | Usage |
+|--------------|--------|
+| **Next.js 15** | Framework principal |
+| **React 19** | Bibliothèque UI |
+| **TypeScript** | Typage fort |
+| **Tailwind CSS 4** | Stylisation moderne |
+| **LocalStorage** | Simulation du stockage des commandes |
+| **WebSocket** | Communication temps réel avec l’admin |
+| **Vercel / Node.js** | Déploiement |
+
+---
+
+## 🧩 Installation & Lancement
+
+### 1️⃣ Cloner le projet
 ```bash
+git clone https://github.com/mohamedbatri-6/Burgerito-Next.js.git
+cd Burgerito-Next.js
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+http://localhost:3000
